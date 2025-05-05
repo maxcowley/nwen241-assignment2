@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <unistd.h>
 // Include necessary header files
 
 /**
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
 		printf("Error binding socket\n");
 		return -1;
 	}
+
 	//Loop listening
 	while(1){
 		printf("Listening for connections\n");
@@ -138,6 +140,11 @@ int main(int argc, char *argv[])
 			printf("Error accepting connection");
 			return -1;
 		}
+		pid_t p = fork();
+		if(p != 0){
+			
+		}
+		else{
 		printf("Connection accepted\n");
 		//send first message to client
 		int send_to_client = send(client_fd, "HELLO", strlen("HELLO"), 0);
@@ -145,6 +152,7 @@ int main(int argc, char *argv[])
 			printf("Error sending acknowledgement message");
 			return -1;
 		}
+
 		//Loop receiving
 		while(1){
 			char receive_buffer[100]; //buffer where received msgs are stored
@@ -203,6 +211,7 @@ int main(int argc, char *argv[])
 					send_to_client = send(client_fd, "SERVER 502 Command Error\n", strlen("SERVER 502 Command Error\n"), 0);
 				}
 			}
+		}
 		}
 	}
 }
